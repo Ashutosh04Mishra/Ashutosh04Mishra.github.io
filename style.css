@@ -40,6 +40,10 @@ body {
   transition: color 0.4s ease;
 }
 
+body.menu-open {
+  overflow: hidden;
+}
+
 body::before {
   content: '';
   position: fixed;
@@ -106,6 +110,7 @@ nav {
 .theme {
   display: flex;
   align-items: center;
+  gap: 0.75rem;
   margin-left: 1.5rem;
 }
 .theme-toggle {
@@ -164,6 +169,56 @@ body.nether .icon-nether { opacity: 1; }
 @keyframes themeFlash {
   0% { opacity: 0.95; }
   100% { opacity: 0; }
+}
+
+/* ===== Hamburger button (hidden on desktop) ===== */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 38px;
+  height: 34px;
+  background: transparent;
+  border: 2px solid var(--border);
+  border-radius: 0.4rem;
+  cursor: pointer;
+  padding: 0;
+  z-index: 210;
+}
+.hamburger span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--nav-text);
+  border-radius: 1px;
+  transition: transform 0.3s ease, opacity 0.3s ease, background 0.3s ease;
+}
+.hamburger.active span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ===== Mobile nav overlay (behind the dropdown, closes menu on tap) ===== */
+.nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.nav-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .hero {
@@ -689,7 +744,41 @@ footer {
 
 @media (max-width: 768px) {
   nav { padding: 1rem 1.5rem; }
-  .nav-links { display: none; }
+
+  .hamburger { display: flex; }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: min(78vw, 300px);
+    z-index: 200;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding: 6rem 2rem 2rem;
+    background: rgba(8, 8, 10, 0.97);
+    border-left: 3px solid var(--border);
+    transform: translateX(100%);
+    transition: transform 0.35s ease;
+  }
+  .nav-links.open {
+    transform: translateX(0);
+  }
+  .nav-links li {
+    list-style: none;
+    width: 100%;
+  }
+  .nav-links a {
+    display: block;
+    padding: 1rem 0;
+    font-size: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-overlay { display: block; }
+
   .hero { padding-left: 1.5rem; padding-right: 1.5rem; }
   section:not(.hero) { padding: 2.5rem 1.5rem; margin: 1.5rem auto; }
   .hero-content { padding: 1.75rem; }
@@ -704,4 +793,5 @@ footer {
 
 @media (prefers-reduced-motion: reduce) {
   .motes, .reveal, .toggle-knob, #theme-flash { animation: none !important; transition: none !important; }
+  .nav-links { transition: none !important; }
 }
