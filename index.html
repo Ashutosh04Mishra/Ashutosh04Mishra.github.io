@@ -22,7 +22,7 @@
 <!-- NAV -->
 <nav>
   <a href="#" class="nav-logo">Ashutosh M.</a>
-  <ul class="nav-links">
+  <ul class="nav-links" id="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#experience">Experience</a></li>
@@ -54,8 +54,15 @@
         </span>
       </span>
     </button>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </div>
 </nav>
+
+<div class="nav-overlay" id="nav-overlay" onclick="closeMenu()"></div>
 
 <!-- HERO -->
 <section class="hero" style="max-width: 100%; padding-top: 0; padding-bottom: 0;">
@@ -384,6 +391,49 @@ function toggletheme(e){
   }
 }
 
+/* ===== Mobile hamburger menu ===== */
+var hamburgerBtn = document.getElementById('hamburger');
+var navLinks = document.getElementById('nav-links');
+var navOverlay = document.getElementById('nav-overlay');
+
+function openMenu() {
+  navLinks.classList.add('open');
+  navOverlay.classList.add('open');
+  hamburgerBtn.classList.add('active');
+  hamburgerBtn.setAttribute('aria-expanded', 'true');
+  document.body.classList.add('menu-open');
+}
+
+function closeMenu() {
+  navLinks.classList.remove('open');
+  navOverlay.classList.remove('open');
+  hamburgerBtn.classList.remove('active');
+  hamburgerBtn.setAttribute('aria-expanded', 'false');
+  document.body.classList.remove('menu-open');
+}
+
+function toggleMenu() {
+  if (navLinks.classList.contains('open')) {
+    closeMenu();
+  } else {
+    openMenu();
+  }
+}
+
+// Close the menu when a nav link is tapped
+navLinks.querySelectorAll('a').forEach(function (link) {
+  link.addEventListener('click', closeMenu);
+});
+
+// Close on Escape
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') closeMenu();
+});
+
+// If the viewport is resized back to desktop while menu is open, close it
+window.addEventListener('resize', function () {
+  if (window.innerWidth > 768) closeMenu();
+});
 </script>
 </body>
 </html>
